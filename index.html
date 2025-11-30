@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Minha IA</title>
+</head>
+<body>
+
+  <h1>Digite seu prompt:</h1>
+  <input id="prompt" type="text" placeholder="Digite aqui..." style="width: 250px;">
+  <button onclick="enviar()">Enviar</button>
+
+  <pre id="resposta"></pre>
+
+<script>
+async function enviar() {
+  const texto = document.getElementById("prompt").value;
+  document.getElementById("resposta").innerText = "Carregando...";
+
+  const r = await fetch(
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateText?key=SUA_API_KEY",
+    {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        prompt: { text: texto }
+      })
+    }
+  );
+
+  const data = await r.json();
+  document.getElementById("resposta").innerText =
+    data.candidates?.[0]?.output || "Erro na resposta";
+}
+</script>
+
+</body>
+</html>
